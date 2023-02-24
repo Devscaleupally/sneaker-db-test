@@ -1,0 +1,108 @@
+<!-- Bootstrap model to display Sneaker Details -->
+
+<div class="modal" id="sneakerData">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sneaker Details</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="sneaker-data">
+                <div class="row">
+                    <div class="col-6">
+                        <img src="https://stockx-360.imgix.net/Air-Jordan-1-Retro-High-Off-White-Chicago/Images/Air-Jordan-1-Retro-High-Off-White-Chicago/Lv2/img01.jpg?auto=format,compress&q=90&updated_at=1609899200&w=1000"
+                            alt="Sneaker Image" class="img-fluid" id="sneaker-image">
+                    </div>
+                    <div class="col-6">
+                        <h5 id="sneaker-title"></h5>
+                        <strong>Brand: </strong><span id="brand"></span>
+                        <br>
+                        <strong>Colorway: </strong><span id="colorway"></span>
+                        <br>
+                        <strong>Price: </strong> $<span id="price"></span>
+                        <br>
+                        <strong>Style</strong> <span id="style"></span>
+                        <hr>
+                        <strong>Description</strong>
+                        <p id="description"></p>
+                    </div>
+                </div>
+                <button class="btn btn-primary">Confirm</button>
+            </div>
+            <div class="modal-body" id="spinner">
+                <!-- Center aligned Spinner -->
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#sneakerData").modal();
+
+        // search for sneaker
+        $("#find-sneaker").click(function () {
+            fetch_sneaker();
+        });
+
+        // handle form submit
+        $("form").submit(function (e) {
+            e.preventDefault();
+            fetch_sneaker();
+        });
+    });
+
+    function fetch_sneaker() {
+        // get style ID
+        var styleID = $('input[name="style-id"]').val();
+        if (styleID == "") {
+            alert("Please enter a Style ID");
+            return;
+        }
+
+        // show spinner
+        $("#spinner").attr("hidden", false);
+        // hide sneaker details
+        $("#sneaker-data").attr("hidden", true);
+        // show modal
+        $("#sneakerData").modal("show");
+
+        // get sneaker data
+        $.ajax({
+            url: "/api/sneakers/" + styleID,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (data.data == null) {
+                    $("#sneakerData").modal("hide");
+                    alert("Sneaker not found");
+                    return;
+                }
+                // get sneaker details
+                var sneaker = data.data;
+                // set sneaker details
+                $("#sneaker-image").attr("src", sneaker.thumbnail);
+                $("#sneaker-title").text(sneaker.shoeName);
+                $("#brand").text(sneaker.brand);
+                $("#colorway").text(sneaker.colorway);
+                $("#price").text(sneaker.retailPrice);
+                $("#description").text(sneaker.description || "No description available");
+                $("#style").text(sneaker.styleID);
+                // hide spinner
+                $("#spinner").attr("hidden", true);
+                // show sneaker details
+                $("#sneaker-data").attr("hidden", false);
+            },
+            error: function (error) {
+                console.log(error);
+                alert("An error occurred!\nPlease try again later.");
+            }
+        });
+    }
+</script>

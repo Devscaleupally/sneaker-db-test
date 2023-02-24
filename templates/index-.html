@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Verticallly Center Aligned Items -->
+<div class="row vh-100 vw-100 align-items-center justify-content-center p-2">
+    <div class="col-6 text-center">
+        <h1>Add new Sneaker</h1>
+        <form action="/" method="get" class="justify-content-center">
+            <input type="text" class="form-control" placeholder="Style ID (example: cw0898-400)" name="style-id">
+        </form>
+        <button class="btn btn-primary mt-3" id="find-sneaker">Find</button>
+    </div>
+</div>
+
+<!-- Modal -->
+{% include "modals/modal_sneaker_data.html" %}
+
+{% endblock %}

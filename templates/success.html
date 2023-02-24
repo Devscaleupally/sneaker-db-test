@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row vh-100 vw-100 align-items-center justify-content-center p-2">
+    <div class="col-6 text-center">
+        <h1>
+            Success!
+        </h1>
+        <p>Data uploaded successfully, and can be accessed <a href="{{sheetURL}}">here</a></p>
+        <button class="btn btn-link">
+            <a href="/">
+                Go to Home
+            </a>
+        </button>
+    </div>
+</div>
+{% endblock %}

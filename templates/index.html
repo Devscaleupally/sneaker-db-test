@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Verticallly Center Aligned Items -->
+<div class="row vh-100 vw-100 align-items-center justify-content-center p-2" id="search-container">
+    <div class="col-6 text-center" id="search-style">
+        <h1>Add new Sneaker</h1>
+        <form action="/" method="get" class="justify-content-center" id="search-style-form">
+            <input type="text" class="form-control" placeholder="Style ID (example: cw0898-400)" name="style-id">
+        </form>
+        <button class="btn btn-primary mt-3" id="find-sneaker">Find</button>
+    </div>
+    <div class="text-center" hidden id="spinner">
+        <div class="spinner-border"></div>
+    </div>
+</div>
+
+
+<div class="container" id="sneaker-data" hidden>
+    <div class="col-8 m-auto mt-3">
+        <h1 class="text-center">Add new Sneaker</h1>
+        <!-- Tabular form -->
+        <form action="/add-data" method="POST" class="justify-content-center mt-5">
+            <table class="table align-middle">
+                <tr>
+                    <td>Title</td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="E.g. Nike Air Force 1" name="title"
+                            id="title">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Thumbnail</td>
+                    <td>
+                        <input type="url" name="thumbnail" id="thumbnail" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Brand</td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="E.g. Nike" name="brand" id="brand">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Colorway</td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Colorway" name="colorway" id="colorway">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Price(USD)</td>
+                    <td>
+                        <input type="number" class="form-control" placeholder="Price" name="price" id="price">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Style</td>
+                    <td>
+                        <input type="text" class="form-control col-8" placeholder="Style" name="style" id="style">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>
+                        <textarea class="form-control" placeholder="Description" name="description"
+                            id="description"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <div class="text-center">
+                <button class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        // search for sneaker
+        $("#find-sneaker").click(function () {
+            fetch_sneaker();
+        });
+
+        // handle form submit
+        $("form#search-style-form").submit(function (e) {
+            e.preventDefault();
+            fetch_sneaker();
+        });
+    });
+
+    function fetch_sneaker() {
+        // get style ID
+        var styleID = $('input[name="style-id"]').val();
+        if (styleID == "") {
+            alert("Please enter a Style ID");
+            return;
+        }
+
+        $('#search-style').attr('hidden', true)
+        // show spinner
+        $("#spinner").attr("hidden", false);
+        // hide sneaker details
+        $("#sneaker-data").attr("hidden", true);
+
+        // get sneaker data
+        $.ajax({
+            url: "/api/sneakers/" + styleID,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (data.data == null) {
+                    alert("Sneaker not found");
+                    return;
+                }
+                // get sneaker details
+                var sneaker = data.data;
+                // set sneaker details
+                $("#thumbnail").val(sneaker.thumbnail);
+                $("#title").val(sneaker.shoeName);
+                $("#brand").val(sneaker.brand);
+                $("#colorway").val(sneaker.colorway);
+                $("#price").val(sneaker.retailPrice);
+                $("#description").val(sneaker.description || "No description available");
+                $("#style").val(sneaker.styleID);
+                // hide spinner
+                $("#search-container").attr("hidden", true);
+                // show sneaker details
+                $("#sneaker-data").attr("hidden", false);
+            },
+            error: function (error) {
+                console.log(error);
+                alert("An error occurred!\nPlease try again later.");
+                $('#spinner').attr('hidden', true);
+                $('#search-style').attr('hidden', false)
+            }
+        });
+    }
+</script>
+{% endblock %}
