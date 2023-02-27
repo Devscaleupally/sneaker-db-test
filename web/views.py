@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, jsonify
+from flask import Blueprint, request, render_template, jsonify, redirect
 from utils import sprdsheets
 
 def home():
@@ -16,7 +16,9 @@ def post_details():
      - Save details in Google Spreadsheet
      - Shows a HTML page with `success` message and a link to spreadsheet.
     """
-    
+    if request.method != 'POST':
+        # redirect to home page
+        return redirect('/')
     # get form
     try:
         data = request.form.to_dict()
