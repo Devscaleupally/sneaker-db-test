@@ -6,7 +6,7 @@
 
 <div class="container" id="sneaker-data">
     <div class="col-8 m-auto mt-3">
-        <h1 class="text-center">Add new Sneaker</h1>
+        <h1 class="text-center">Add a new Product</h1>
         <!-- Tabular form -->
         <form action="/add-data" method="POST" class="justify-content-center mt-5">
             <table class="table align-middle">
@@ -14,7 +14,8 @@
                     <td>Style</td>
                     <td>
                         <div class="input-group">
-                            <input type="text" class="form-control col-8" placeholder="Style" name="style" id="style">
+                            <input type="text" class="form-control col-8" placeholder="Style" name="style" id="style"
+                                required>
                             <button class="btn btn-dark" type="button" id="find-sneaker">Find</button>
                         </div>
                     </td>
@@ -23,31 +24,33 @@
                     <td>Title</td>
                     <td>
                         <input type="text" class="form-control" placeholder="E.g. Nike Air Force 1" name="title"
-                            id="title">
+                            id="title" required>
                     </td>
                 </tr>
                 <tr>
                     <td>Thumbnail</td>
                     <td>
-                        <input type="url" name="thumbnail" id="thumbnail" class="form-control">
+                        <input type="url" name="thumbnail" id="thumbnail" class="form-control" required>
                     </td>
                 </tr>
                 <tr>
                     <td>Brand</td>
                     <td>
-                        <input type="text" class="form-control" placeholder="E.g. Nike" name="brand" id="brand">
+                        <input type="text" class="form-control" placeholder="E.g. Nike" name="brand" id="brand"
+                            required>
                     </td>
                 </tr>
                 <tr>
                     <td>Colorway</td>
                     <td>
-                        <input type="text" class="form-control" placeholder="Colorway" name="colorway" id="colorway">
+                        <input type="text" class="form-control" placeholder="Colorway" name="colorway" id="colorway"
+                            required>
                     </td>
                 </tr>
                 <tr>
                     <td>Price(USD)</td>
                     <td>
-                        <input type="number" class="form-control" placeholder="Price" name="price" id="price">
+                        <input type="number" class="form-control" placeholder="Price" name="price" id="price" required>
                     </td>
                 </tr>
                 <tr>
