@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask import request
 import requests
-from utils import vars
+from utils.vars import SneakerAPI
 
 
 def get_sneaker(style):
@@ -9,7 +9,7 @@ def get_sneaker(style):
     # replace SPACE with "-" in the style
     style = style.replace(" ", "-")
     # Get the data from the API
-    url = f'{vars.SNEAKER_API_BASE_URL}/id/{style}/prices'
+    url = SneakerAPI.price_details.format(style=style)
     response = requests.get(url)
     if response.text == 'Product Not Found':
         return jsonify({'error': 'Sneaker not found.', 'success': False})
